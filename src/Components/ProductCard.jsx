@@ -1,10 +1,14 @@
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addToCart } from '../store/cartSlice'
+import { addToWishlist, removeFromWishlist } from '../store/wishlistSlice'
 
 function ProductCard({ product }) {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
+  const wishlistItems = useSelector(state => state.wishlist.items)
+  const isWishlisted = wishlistItems.some(item => item.id === product.id)
 
   const handleAddToCart = () => {
     dispatch(addToCart({
@@ -15,12 +19,25 @@ function ProductCard({ product }) {
     }))
   }
 
+  const handleWishlist = () => {
+    if (isWishlisted) {
+      dispatch(removeFromWishlist(product.id))
+    } else {
+      dispatch(addToWishlist({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+      }))
+    }
+  }
+
   return (
     <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
 
-      {/* Image */}
+      {/* Image + Wishlist button */}
       <div
-        className="h-48 flex items-center justify-center p-4 cursor-pointer"
+        className="h-48 flex items-center justify-center p-4 cursor-pointer relative"
         onClick={() => navigate(`/products/${product.id}`)}
       >
         <img
@@ -28,6 +45,17 @@ function ProductCard({ product }) {
           alt={product.title}
           className="h-full object-contain"
         />
+
+        {/* Heart button */}
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            handleWishlist()
+          }}
+          className="absolute top-2 right-2 w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center text-sm"
+        >
+          {isWishlisted ? '❤️' : '🤍'}
+        </button>
       </div>
 
       {/* Info */}
@@ -52,6 +80,23 @@ function ProductCard({ product }) {
 }
 
 export default ProductCard
+
+
+// 2 cheezein samjho:
+// isWishlisted:
+
+
+// const isWishlisted = wishlistItems.some(item => item.id === product.id)
+
+// Wishlist mein yeh product hai? → true
+// Nahi hai? → false
+
+
+// e.stopPropagation():
+
+// Heart button click kiya
+// Card bhi click na ho jaye
+// stopPropagation → upar propagate mat karo
 
 
 

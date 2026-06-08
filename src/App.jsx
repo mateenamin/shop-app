@@ -5,6 +5,8 @@ import Home from "./Pages/Home"
 import ProductDetail from "./Pages/ProductDetail"
 import Cart from "./Pages/Cart"
 import Login from "./Pages/Login"
+import Wishlist from './pages/Wishlist'
+
 
 
 
@@ -23,7 +25,8 @@ function App() {
       <Routes>
    <Route path="/" element ={<Home/>}  />
    <Route path="/products/:id" element ={<ProductDetail/>}  />
-   <Route path="/login" element ={<Login/>}  />
+   <Route path="/login" element ={<Login/>}  />\
+    <Route path="/wishlist" element={<Wishlist />} />
 
 
 

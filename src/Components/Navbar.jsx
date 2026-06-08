@@ -1,15 +1,16 @@
 import { Link, NavLink, useNavigate } from "react-router-dom"
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useAuth } from '../context/AuthContext'
 
 const Navbar = () => {
   const cartItems = useSelector(state => state.cart.items)
   const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0)
-  const { isLoggedIn, logout } = useAuth()
+  const { isLoggedIn, logout, user } = useAuth()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleLogout = () => {
-    logout()
+    logout(user?.email, dispatch)
     navigate('/')
   }
 
@@ -33,6 +34,18 @@ const Navbar = () => {
           }
         >
           Home
+        </NavLink>
+
+        {/* Wishlist */}
+        <NavLink
+          to="/wishlist"
+          className={({ isActive }) =>
+            isActive
+              ? "text-[#e94560] font-semibold text-sm"
+              : "text-gray-400 hover:text-white text-sm transition"
+          }
+        >
+          Wishlist
         </NavLink>
 
         {/* Cart with badge */}

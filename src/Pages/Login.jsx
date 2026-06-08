@@ -1,12 +1,14 @@
 import { useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useDispatch } from 'react-redux'
 
 function Login() {
   const emailRef = useRef()
   const passwordRef = useRef()
   const navigate = useNavigate()
-  const { login, isLoggedIn, logout ,user } = useAuth()
+  const { login, isLoggedIn, logout, user } = useAuth()
+  const dispatch = useDispatch()
 
   const handleLogin = () => {
     const email = emailRef.current.value
@@ -17,11 +19,10 @@ function Login() {
       return
     }
 
-    login(email)
+    login(email, dispatch)
     navigate('/')
   }
 
-  // Agar pehle se logged in hai
   if (isLoggedIn) {
     return (
       <div
@@ -33,11 +34,9 @@ function Login() {
           <p className="text-gray-800 font-medium mb-2">
             Tum already logged in ho!
           </p>
-          <p className="text-gray-400 text-sm mb-6">
-            {user?.email}
-          </p>
+          <p className="text-gray-400 text-sm mb-6">{user?.email}</p>
           <button
-            onClick={logout}
+            onClick={() => logout(user?.email, dispatch)}
             className="w-full py-3 text-white rounded-lg font-medium"
             style={{ backgroundColor: '#e94560' }}
           >
@@ -54,15 +53,12 @@ function Login() {
       className="flex items-center justify-center"
     >
       <div className="bg-white border border-gray-200 rounded-lg p-8 max-w-sm w-full">
-
         <h1 className="text-2xl font-bold text-gray-800 mb-2 text-center">
           Welcome Back
         </h1>
         <p className="text-gray-400 text-sm text-center mb-6">
           Login karo apne account mein
         </p>
-
-        {/* Email */}
         <div className="mb-4">
           <label className="text-sm text-gray-600 block mb-2">
             Email address
@@ -74,8 +70,6 @@ function Login() {
             className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm outline-none"
           />
         </div>
-
-        {/* Password */}
         <div className="mb-6">
           <label className="text-sm text-gray-600 block mb-2">
             Password
@@ -87,8 +81,6 @@ function Login() {
             className="w-full px-4 py-3 border border-gray-200 rounded-lg text-sm outline-none"
           />
         </div>
-
-        {/* Button */}
         <button
           onClick={handleLogin}
           className="w-full py-3 text-white rounded-lg font-medium"
@@ -96,7 +88,6 @@ function Login() {
         >
           Login
         </button>
-
       </div>
     </div>
   )
