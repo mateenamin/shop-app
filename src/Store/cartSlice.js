@@ -66,3 +66,15 @@ export default cartSlice.reducer
 // addToCart → Product already cart mein hai? Quantity +1. Nahi hai? Naya add karo.
 // removeFromCart → Product ID se dhundho aur hata do.
 // updateQuantity → Product ki quantity badlo.
+
+
+
+
+// Din 5 recap — kya seekha:
+// ✅ cartSlice.js — addToCart, removeFromCart, updateQuantity
+// ✅ store.js — cartReducer add kiya
+// ✅ useDispatch — store mein data bheja
+// ✅ useSelector — store se data liya
+// ✅ Navbar badge — cart count dikh raha hai
+// ✅ Cart page — items, quantity, total
+// ✅ ProductDetail mein bhi Add to Cart lagaya
