@@ -1,9 +1,15 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom"
+import Navbar from "./Components/Navbar"
+import ProtectedRoute from './components/ProtectedRoute'
 import Home from "./Pages/Home"
 import ProductDetail from "./Pages/ProductDetail"
 import Cart from "./Pages/Cart"
 import Login from "./Pages/Login"
-import Navbar from "./Components/Navbar"
+
+
+
+
+
 function App() {
   return (
     <div>
@@ -17,8 +23,26 @@ function App() {
       <Routes>
    <Route path="/" element ={<Home/>}  />
    <Route path="/products/:id" element ={<ProductDetail/>}  />
-   <Route path="/cart" element ={<Cart/>}  />
    <Route path="/login" element ={<Login/>}  />
+
+
+
+   {/* Cart — sirf logged in user dekh sakta hai */}
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <Cart />
+            </ProtectedRoute>
+          }
+        />
+
+
+        {/* Matlab:
+Cart ke darwaze pe guard khada hai
+Login nahi? → /login pe jao
+Login hai?  → Cart andar aao */}
+   
 
       </Routes>
       </BrowserRouter>
