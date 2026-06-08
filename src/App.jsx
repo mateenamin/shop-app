@@ -7,7 +7,7 @@ import Cart from "./Pages/Cart"
 import Login from "./Pages/Login"
 import Wishlist from './pages/Wishlist'
 
-
+import NotFound from './pages/NotFound'
 
 
 
@@ -45,6 +45,9 @@ function App() {
 Cart ke darwaze pe guard khada hai
 Login nahi? → /login pe jao
 Login hai?  → Cart andar aao */}
+
+ {/* Koi bhi unknown route */}
+        <Route path="*" element={<NotFound />} />
    
 
       </Routes>

@@ -16,14 +16,24 @@
 // Step 1 → cartSlice.js banao
 // Step 2 → store.js mein add karo
 // Step 3 → Add to Cart button connect karo
-
 import { createSlice } from '@reduxjs/toolkit'
+
+// localStorage se cart load karo
+const loadCartFromStorage = () => {
+  try {
+    const saved = localStorage.getItem('cart')
+    if (saved) {
+      return JSON.parse(saved)
+    }
+    return { items: [] }
+  } catch {
+    return { items: [] }
+  }
+}
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState: {
-    items: [],  // ← hamesha khali shuru karo
-  },
+  initialState: loadCartFromStorage(), // ← reload pe localStorage se lo
 
   reducers: {
     addToCart: (state, action) => {
@@ -55,14 +65,13 @@ const cartSlice = createSlice({
       localStorage.setItem('cart', JSON.stringify(state))
     },
 
-    // Naya action — cart load karo login ke baad
     loadCart: (state, action) => {
       state.items = action.payload
     },
 
-    // Naya action — cart clear karo logout pe
     clearCart: (state) => {
       state.items = []
+      localStorage.removeItem('cart')
     },
   },
 })
