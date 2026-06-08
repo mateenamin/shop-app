@@ -142,7 +142,7 @@ export default Home
 
 
 
-// Day 3
+//  Day 3 
 
 // Aaj kya seekha?
 // Store → Godown — poori app ka data ek jagah
