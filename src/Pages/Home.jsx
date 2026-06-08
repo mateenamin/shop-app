@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState , useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ProductCard from '../Components/ProductCard'
 import { useGetProductsQuery } from '../api/productsApi'
@@ -61,13 +61,55 @@ function Home() {
 
 
 
-  return (
-    <div className="bg-[#f5f5f5] min-h-screen">
 
-      {/* Hero Section */}
+// Din 7
+
+// 1. Search bar — name se products filter karo
+// 2. Category buttons — Electronics, Clothing etc.
+
+
+// 3 kaam aaj honge:
+// Step 1 → Search bar banao
+// Step 2 → Category buttons banao
+// Step 3 → useEffect se filter lagao
+
+
+const [search, setSearch] = useState('')
+  const [category, setCategory] = useState('all')
+  const [filtered, setFiltered] = useState([])
+
+  const categories = ['all', 'electronics', "men's clothing", "women's clothing", 'jewelery']
+
+  // useEffect — search ya category change hone pe filter lagao
+  useEffect(() => {
+    if (!data) return
+
+    let result = [...data]
+
+    // Category filter
+    if (category !== 'all') {
+      result = result.filter(p => p.category === category)
+    }
+
+    // Search filter
+    if (search.trim() !== '') {
+      result = result.filter(p =>
+        p.title.toLowerCase().includes(search.toLowerCase())
+      )
+    }
+
+    setFiltered(result)
+  }, [data, search, category])
+
+
+
+  return (
+    <div style={{ backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
+
+      {/* Hero */}
       <div
-        className="text-center py-16 px-6 bg-[#16213e]"
-        
+        className="text-center py-16 px-6"
+        style={{ backgroundColor: '#16213e' }}
       >
         <h1 className="text-4xl font-bold text-white mb-3">
           Best Deals, Every Day
@@ -76,55 +118,85 @@ function Home() {
           Discover top products at amazing prices
         </p>
         <button
-          className="px-8 py-3 text-white rounded-lg font-medium bg-[#e94560]"
+          className="px-8 py-3 text-white rounded-lg font-medium"
+          style={{ backgroundColor: '#e94560' }}
           onClick={() => navigate('/products/1')}
         >
           Shop Now
         </button>
       </div>
 
-      {/* Products Section */}
+      {/* Search + Filter */}
+      <div className="max-w-6xl mx-auto px-6 pt-8">
 
+        {/* Search Bar */}
+        <input
+          type="text"
+          placeholder="Products search karo..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="w-full px-4 py-3 rounded-lg border border-gray-200 bg-white text-gray-800 text-sm mb-4 outline-none"
+        />
 
-      <div className="max-w-8xl mx-auto px-6 py-10">
+        {/* Category Buttons */}
+        <div className="flex gap-3 flex-wrap mb-6">
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setCategory(cat)}
+              className="px-4 py-2 rounded-full text-sm capitalize"
+              style={{
+                backgroundColor: category === cat ? '#e94560' : '#ffffff',
+                color: category === cat ? '#ffffff' : '#666666',
+                border: category === cat ? 'none' : '1px solid #e0e0e0'
+              }}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+      </div>
+
+      {/* Products */}
+      <div className="max-w-6xl mx-auto px-6 pb-10">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">
           Featured Products
         </h2>
 
-        {/* <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {dummyProducts.map(product => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div> */}
-
-
-        {/*  Real Data */}
-          {/* Loading */}
+        {/* Loading */}
         {isLoading && (
-          <div className="text-center py-20 text-gray-500 text-lg">
+          <div className="text-center py-20 text-gray-500">
             Products load ho rahe hain...
           </div>
         )}
 
         {/* Error */}
         {isError && (
-          <div className="text-center py-20 text-red-500 text-lg">
-            Kuch error aa gaya! Dobara try karo.
+          <div className="text-center py-20 text-red-500">
+            Kuch error aa gaya!
           </div>
         )}
 
-        {/* Real Products */}
-        {data && (
+        {/* No Results */}
+        {!isLoading && filtered.length === 0 && (
+          <div className="text-center py-20 text-gray-400">
+            Koi product nahi mila!
+          </div>
+        )}
+
+        {/* Products Grid */}
+        {!isLoading && filtered.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {data.map(product => (
+            {filtered.map(product => (
               <ProductCard key={product.id} product={product} />
             ))}
           </div>
         )}
 
       </div>
-
     </div>
+  
   )
 }
 
