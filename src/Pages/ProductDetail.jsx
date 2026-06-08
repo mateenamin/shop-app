@@ -1,11 +1,29 @@
 import { useParams, useNavigate } from 'react-router-dom'
 import { useGetProductByIdQuery } from '../api/productsApi'
+import { useDispatch } from 'react-redux'
+import { addToCart } from '../store/cartSlice'
 
 function ProductDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  
+
+
 
   const { data: product, isLoading, isError } = useGetProductByIdQuery(id)
+
+
+  const dispatch = useDispatch()
+  
+    const handleAddToCart = () => {
+      dispatch(addToCart({
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+      }))
+    }
+
 
   return (
     <div style={{ backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
@@ -74,7 +92,9 @@ function ProductDetail() {
                   {product.description}
                 </p>
                 <button
-                  className="w-full py-3 text-white rounded-lg font-medium"
+
+                onClick={handleAddToCart}
+                className="w-full py-3 text-white rounded-lg font-medium"
                   style={{ backgroundColor: '#e94560' }}
                 >
                   Add to Cart
@@ -91,3 +111,15 @@ function ProductDetail() {
 }
 
 export default ProductDetail
+
+
+
+
+// Day 4
+
+// ✅ useParams — URL se ID nikali
+// ✅ useGetProductByIdQuery — single product fetch
+// ✅ navigate(-1) — back button
+// ✅ Product detail page complete
+
+
